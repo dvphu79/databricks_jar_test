@@ -7,3 +7,8 @@ key-vault-secret-1
 
 key-vault-secret
 
+MyJob1
+
+example.MyJob1
+
+jar_task_1
