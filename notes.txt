@@ -1,0 +1,9 @@
+
+https://adb-6550571382262071.11.azuredatabricks.net#secrets/createScope
+
+https://adb-6550571382262071.11.azuredatabricks.net
+
+key-vault-secret-1
+
+key-vault-secret
+
