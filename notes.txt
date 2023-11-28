@@ -7,8 +7,8 @@ key-vault-secret-1
 
 key-vault-secret
 
-MyJob5
+MyJob6
 
-example.MyJob5
+example.MyJob6
 
-jar_task_5
+jar_task_6
