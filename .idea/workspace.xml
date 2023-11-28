@@ -4,10 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="b530e617-7a38-402d-a55b-65452898d234" name="Changes" comment="build a jar job for databricks">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build.sbt" beforeDir="false" afterPath="$PROJECT_DIR$/build.sbt" afterDir="false" />
-    </list>
+    <list default="true" id="b530e617-7a38-402d-a55b-65452898d234" name="Changes" comment="build a jar 'MyJob2' for databricks ( Write transformed data to parquet file to container 'level3' )" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -31,6 +28,11 @@
     </system>
   </component>
   <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="4019fcce5b90a14c99a6b63e14ee6723b71bd8e1" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="ProjectCodeStyleSettingsMigration">
@@ -47,20 +49,25 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ASKED_ADD_EXTERNAL_FILES": "true",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "git-widget-placeholder": "main",
-    "project.structure.last.edited": "Modules",
-    "project.structure.proportion": "0.0",
-    "project.structure.side.proportion": "0.0",
-    "settings.build.tools.auto.reload": "SELECTIVE",
-    "settings.editor.selected.configurable": "preferences.pluginManager"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
+    &quot;settings.build.tools.auto.reload&quot;: &quot;SELECTIVE&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;
   }
-}]]></component>
+}</component>
+  <component name="RecentsManager">
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="example" />
+    </key>
+  </component>
   <component name="RunManager" selected="Application.Main">
     <configuration name="Main" type="Application" factoryName="Application" temporary="true">
       <option name="MAIN_CLASS_NAME" value="example.Main" />
@@ -88,8 +95,23 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration default="true" type="JetRunConfigurationType">
+      <module name="databricks_jar_test" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
+      <module name="databricks_jar_test" />
+      <option name="filePath" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Application.PrintArgs" />
+        <item itemvalue="Application.Main" />
         <item itemvalue="Application.Main" />
         <item itemvalue="Application.PrintArgs" />
       </list>
@@ -176,7 +198,23 @@
       <option name="project" value="LOCAL" />
       <updated>1700724168030</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="build a jar 'MyJob1' for databricks ( Write transformed data to parquet file to level3 container )">
+      <option name="closed" value="true" />
+      <created>1701008195883</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1701008195884</updated>
+    </task>
+    <task id="LOCAL-00011" summary="build a jar 'MyJob2' for databricks ( Write transformed data to parquet file to container 'level3' )">
+      <option name="closed" value="true" />
+      <created>1701024703046</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1701024703047</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -195,6 +233,8 @@
     <MESSAGE value="create project" />
     <MESSAGE value="read data from level2 container" />
     <MESSAGE value="build a jar job for databricks" />
-    <option name="LAST_COMMIT_MESSAGE" value="build a jar job for databricks" />
+    <MESSAGE value="build a jar 'MyJob1' for databricks ( Write transformed data to parquet file to level3 container )" />
+    <MESSAGE value="build a jar 'MyJob2' for databricks ( Write transformed data to parquet file to container 'level3' )" />
+    <option name="LAST_COMMIT_MESSAGE" value="build a jar 'MyJob2' for databricks ( Write transformed data to parquet file to container 'level3' )" />
   </component>
 </project>

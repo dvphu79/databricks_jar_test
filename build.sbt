@@ -10,7 +10,7 @@ lazy val root = (project in file("."))
   .settings(
     name := "databricks_jar_test",
     idePackagePrefix := Some("example"),
-    assembly / mainClass := Some("example.MyJob2"),
+    assembly / mainClass := Some("example.MyJob3"),
     libraryDependencies ++= Seq(
       "org.apache.spark" %% "spark-core" % sparkVersion % "provided",
       "org.apache.spark" %% "spark-sql" % sparkVersion % "provided",
