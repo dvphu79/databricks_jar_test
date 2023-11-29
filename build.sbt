@@ -10,10 +10,15 @@ lazy val root = (project in file("."))
   .settings(
     name := "databricks_jar_test",
     idePackagePrefix := Some("example"),
-    assembly / mainClass := Some("example.MyJob7"),
+    compile / mainClass := Some("example.MyJob9"),
+    assembly / mainClass := Some("example.MyJob9"),
+    assembly / assemblyMergeStrategy := {
+      case PathList("META-INF", xs@_*) => MergeStrategy.discard
+      case x => MergeStrategy.first
+    },
     libraryDependencies ++= Seq(
-      "org.apache.spark" %% "spark-core" % sparkVersion % "provided",
-      "org.apache.spark" %% "spark-sql" % sparkVersion % "provided",
-      "com.databricks" %% "dbutils-api" % "0.0.6" % "provided"
-    )
+      "org.apache.spark" %% "spark-core" % sparkVersion,
+      "org.apache.spark" %% "spark-sql" % sparkVersion,
+      "com.databricks" %% "dbutils-api" % "0.0.6"
+    ),
   )

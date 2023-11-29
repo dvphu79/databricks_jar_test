@@ -4,10 +4,10 @@ import com.databricks.dbutils_v1.DBUtilsHolder.dbutils
 import org.apache.spark.sql._
 import org.apache.spark.sql.types._
 
-object MyJob7 {
+object MyJob8 {
   def main(args: Array[String]): Unit = {
 
-    println("------  MyJob7  ------ ")
+    println("------  MyJob8  ------ ")
 
     println("START MY JAR")
 
@@ -15,13 +15,13 @@ object MyJob7 {
 
     println("CREATE SPARK INSTANCE")
 
-    val spark = SparkSession.builder().getOrCreate()
+    val spark = SparkSession.builder().master("local").getOrCreate()
 
     //
 
-    val serviceCredential = dbutils.secrets.get(scope = "key-vault-secret-1", key = "synapse-databricks-secret")
+    val serviceCredential = "M2H8Q~Oi4fiDqxuAT0luOKOw~tD7tUoWZcgOrb1x"
 
-    val appId = "e9f6ff28-1020-4962-8131-c11a5ccaf040"
+    val appId = "c95ad66d-23df-4d9a-9262-57adfa0c7966"
     val tenantId = "e85413be-9893-4b17-ac77-83c4443a22a3"
 
     val containerName = "level2"
@@ -53,22 +53,11 @@ object MyJob7 {
       "fs.azure.account.oauth2.client.endpoint" -> s"https://login.microsoftonline.com/$tenantId/oauth2/token",
       "fs.azure.createRemoteFileSystemDuringInitialization" -> "true")
 
-    var mounts = dbutils.fs.ls("/mnt/").filter(_.name.contains(s"$containerName"))
-    println(mounts.size)
-    if (mounts.nonEmpty) {
-      dbutils.fs.unmount(s"/mnt/$containerName")
-      println(s"force unmounted /mnt/$containerName")
-    }
-    mounts = dbutils.fs.ls("/mnt/").filter(_.name.contains(s"$containerName"))
-    println(mounts.size)
-    if (mounts.isEmpty) {
-      dbutils.fs.mount(
-        source = s"abfss://$containerName@$storageAccountName.dfs.core.windows.net",
-        mountPoint = s"/mnt/$containerName",
-        extraConfigs = configs)
-      println(s"mounted /mnt/$containerName")
-    }
-    println(mounts.size)
+    dbutils.fs.mount(
+      source = s"abfss://$containerName@$storageAccountName.dfs.core.windows.net",
+      mountPoint = s"/mnt/$containerName",
+      extraConfigs = configs)
+    println(s"mounted /mnt/$containerName")
     println(dbutils.fs.ls(s"/mnt/$containerName"))
 
 
@@ -147,10 +136,10 @@ object MyJob7 {
 
     //
 
-    println("UPLOAD TRANSFORMED DATA TO A TABLE IN DATA WAREHOUSE (AZURE SYNAPSE) ")
-
-    configSparkForSynapseConnection()
-    uploadTransformedDataToSynapseTable(mergeSeqDf)
+//    println("UPLOAD TRANSFORMED DATA TO A TABLE IN DATA WAREHOUSE (AZURE SYNAPSE) ")
+//
+//    configSparkForSynapseConnection()
+//    uploadTransformedDataToSynapseTable(mergeSeqDf)
 
     //
 
@@ -159,7 +148,7 @@ object MyJob7 {
     //
 
 
-    println("------  MyJob7  ------ ")
+    println("------  MyJob8  ------ ")
 
 
     //
