@@ -19,9 +19,9 @@ object MyJob9 {
 
     //
 
-    val serviceCredential = "M2H8Q~Oi4fiDqxuAT0luOKOw~tD7tUoWZcgOrb1x"
+    val serviceCredential = dbutils.secrets.get(scope = "key-vault-secret-1", key = "synapse-databricks-secret")
 
-    val appId = "c95ad66d-23df-4d9a-9262-57adfa0c7966"
+    val appId = "e9f6ff28-1020-4962-8131-c11a5ccaf040"
     val tenantId = "e85413be-9893-4b17-ac77-83c4443a22a3"
 
     val containerName = "level2"
@@ -143,10 +143,10 @@ object MyJob9 {
 
     //
 
-//    println("UPLOAD TRANSFORMED DATA TO A TABLE IN DATA WAREHOUSE (AZURE SYNAPSE) ")
-//
-//    configSparkForSynapseConnection()
-//    uploadTransformedDataToSynapseTable(mergeSeqDf)
+    println("UPLOAD TRANSFORMED DATA TO A TABLE IN DATA WAREHOUSE (AZURE SYNAPSE) ")
+
+    configSparkForSynapseConnection()
+    uploadTransformedDataToSynapseTable(mergeSeqDf)
 
     //
 
