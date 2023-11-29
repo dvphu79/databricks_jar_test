@@ -4,10 +4,10 @@ import com.databricks.dbutils_v1.DBUtilsHolder.dbutils
 import org.apache.spark.sql._
 import org.apache.spark.sql.types._
 
-object MyJob9 {
+object MyJob {
   def main(args: Array[String]): Unit = {
 
-    println("------  MyJob9  ------ ")
+    println("------  MyJob  ------ ")
 
     println("START MY JAR")
 
@@ -155,7 +155,7 @@ object MyJob9 {
     //
 
 
-    println("------  MyJob9  ------ ")
+    println("------  MyJob  ------ ")
 
 
     //

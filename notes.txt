@@ -1,11 +1,17 @@
 
-https://adb-6550571382262071.11.azuredatabricks.net#secrets/createScope
+https://adb-2726661345453724.4.azuredatabricks.net#secrets/createScope
 
-https://adb-6550571382262071.11.azuredatabricks.net
+https://adb-2726661345453724.4.azuredatabricks.net
+
+key-vault-secret-2
 
 key-vault-secret-1
 
 key-vault-secret
+
+databricks secrets list-scopes
+
+nano ~/.databrickscfg
 
 MyJob7
 

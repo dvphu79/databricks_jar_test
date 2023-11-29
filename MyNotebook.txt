@@ -41,22 +41,18 @@ import org.apache.spark.sql.types._
     "fs.azure.account.oauth2.client.endpoint" -> s"https://login.microsoftonline.com/$tenantId/oauth2/token",
     "fs.azure.createRemoteFileSystemDuringInitialization" -> "true")
 
-  var mounts = dbutils.fs.ls("/mnt/").filter(_.name.contains(s"$containerName"))
-  println(mounts.size)
-  if (mounts.nonEmpty) {
+  try {
     dbutils.fs.unmount(s"/mnt/$containerName")
-    println(s"force unmounted /mnt/$containerName")
+    println(s"success unmounted /mnt/$containerName")
+  } catch {
+    case exception: Exception => println(s"failed unmounted /mnt/$containerName")
   }
-  mounts = dbutils.fs.ls("/mnt/").filter(_.name.contains(s"$containerName"))
-  println(mounts.size)
-  if (mounts.isEmpty) {
-    dbutils.fs.mount(
-      source = s"abfss://$containerName@$storageAccountName.dfs.core.windows.net",
-      mountPoint = s"/mnt/$containerName",
-      extraConfigs = configs)
-    println(s"mounted /mnt/$containerName")
-  }
-  println(mounts.size)
+
+  dbutils.fs.mount(
+    source = s"abfss://$containerName@$storageAccountName.dfs.core.windows.net",
+    mountPoint = s"/mnt/$containerName",
+    extraConfigs = configs)
+  println(s"success mounted /mnt/$containerName")
   println(dbutils.fs.ls(s"/mnt/$containerName"))
   
 

@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="b530e617-7a38-402d-a55b-65452898d234" name="Changes" comment="build a jar 'MyJob2' for databricks ( Write transformed data to parquet file to container 'level3' )" />
+    <list default="true" id="b530e617-7a38-402d-a55b-65452898d234" name="Changes" comment="build a FAT JAR 'MyJob' for databricks with new configs ( Finalize Assignments )" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -95,19 +95,10 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration default="true" type="JetRunConfigurationType">
-      <module name="databricks_jar_test" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
-      <module name="databricks_jar_test" />
-      <option name="filePath" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
+    <list>
+      <item itemvalue="Application.Main" />
+      <item itemvalue="Application.PrintArgs" />
+    </list>
     <recent_temporary>
       <list>
         <item itemvalue="Application.PrintArgs" />
@@ -214,7 +205,79 @@
       <option name="project" value="LOCAL" />
       <updated>1701024703047</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="build a jar 'MyJob8' for databricks to test Fat ( or Uber ) Jar with dependencies">
+      <option name="closed" value="true" />
+      <created>1701250238891</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1701250238891</updated>
+    </task>
+    <task id="LOCAL-00013" summary="build a jar 'MyJob9' for databricks to test Fat ( or Uber ) Jar with dependencies">
+      <option name="closed" value="true" />
+      <created>1701251294284</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1701251294284</updated>
+    </task>
+    <task id="LOCAL-00014" summary="build a FAT JAR 'MyJob9' for databricks ( Finalize Assignments )">
+      <option name="closed" value="true" />
+      <created>1701253754398</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1701253754399</updated>
+    </task>
+    <task id="LOCAL-00015" summary="build a FAT JAR 'MyJob9' for databricks ( Finalize Assignments )">
+      <option name="closed" value="true" />
+      <created>1701254013043</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1701254013043</updated>
+    </task>
+    <task id="LOCAL-00016" summary="build a FAT JAR 'MyJob9' for databricks with new configs ( Finalize Assignments )">
+      <option name="closed" value="true" />
+      <created>1701266127090</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1701266127090</updated>
+    </task>
+    <task id="LOCAL-00017" summary="build a FAT JAR 'MyJob9' for databricks with new configs ( Finalize Assignments )">
+      <option name="closed" value="true" />
+      <created>1701266302961</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1701266302961</updated>
+    </task>
+    <task id="LOCAL-00018" summary="build a FAT JAR 'MyJob11' for databricks with new configs ( Finalize Assignments )">
+      <option name="closed" value="true" />
+      <created>1701266458111</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1701266458111</updated>
+    </task>
+    <task id="LOCAL-00019" summary="build a FAT JAR 'MyJob' for databricks with new configs ( Finalize Assignments )">
+      <option name="closed" value="true" />
+      <created>1701266611132</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1701266611132</updated>
+    </task>
+    <task id="LOCAL-00020" summary="build a FAT JAR 'MyJob' for databricks with new configs ( Finalize Assignments )">
+      <option name="closed" value="true" />
+      <created>1701266705938</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1701266705939</updated>
+    </task>
+    <option name="localTasksCounter" value="21" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -235,6 +298,13 @@
     <MESSAGE value="build a jar job for databricks" />
     <MESSAGE value="build a jar 'MyJob1' for databricks ( Write transformed data to parquet file to level3 container )" />
     <MESSAGE value="build a jar 'MyJob2' for databricks ( Write transformed data to parquet file to container 'level3' )" />
-    <option name="LAST_COMMIT_MESSAGE" value="build a jar 'MyJob2' for databricks ( Write transformed data to parquet file to container 'level3' )" />
+    <MESSAGE value="build a jar 'MyJob7' for databricks to test Fat ( or Uber ) Jar with dependencies" />
+    <MESSAGE value="build a jar 'MyJob8' for databricks to test Fat ( or Uber ) Jar with dependencies" />
+    <MESSAGE value="build a jar 'MyJob9' for databricks to test Fat ( or Uber ) Jar with dependencies" />
+    <MESSAGE value="build a FAT JAR 'MyJob9' for databricks ( Finalize Assignments )" />
+    <MESSAGE value="build a FAT JAR 'MyJob9' for databricks with new configs ( Finalize Assignments )" />
+    <MESSAGE value="build a FAT JAR 'MyJob11' for databricks with new configs ( Finalize Assignments )" />
+    <MESSAGE value="build a FAT JAR 'MyJob' for databricks with new configs ( Finalize Assignments )" />
+    <option name="LAST_COMMIT_MESSAGE" value="build a FAT JAR 'MyJob' for databricks with new configs ( Finalize Assignments )" />
   </component>
 </project>
