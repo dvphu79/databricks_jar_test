@@ -7,13 +7,13 @@ import org.apache.spark.sql.types._
 
   //
   
-  val serviceCredential = dbutils.secrets.get(scope="key-vault-secret-1",key="synapse-databricks-secret")
+  val serviceCredential = dbutils.secrets.get(scope = "key-vault-secret", key = "service-credential-secret")
 
-  val appId = "e9f6ff28-1020-4962-8131-c11a5ccaf040"
+  val appId = "254987db-5fcc-4025-94a2-6cbe94b75c5c"
   val tenantId = "e85413be-9893-4b17-ac77-83c4443a22a3"
 
   val containerName = "level2"
-  val storageAccountName = "storageaccount8238"
+  val storageAccountName = "storageaccount779"
 
   //
 
@@ -183,7 +183,7 @@ import org.apache.spark.sql.types._
   private def writeDataFrameToParquetFileInContainer(df: DataFrame): Unit = {
     val containerName = "level3"
     val fileName = "transformed_user_data.parquet"
-    val storageAccountName = "storageaccount8238"
+    val storageAccountName = "storageaccount779"
     val outputPath = "/FileStore/tables/output"
     df.write.mode("overwrite").parquet(outputPath) 
     dbutils.fs.ls(outputPath)
@@ -198,11 +198,11 @@ import org.apache.spark.sql.types._
 
 
   private def configSparkForSynapseConnection(): Unit = {
-    val serviceCredential = dbutils.secrets.get(scope="key-vault-secret-1",key="synapse-databricks-secret")
-    val storageAccountAccessKey = dbutils.secrets.get(scope="key-vault-secret-1",key="storage-account-access-key")
-    val appId = "e9f6ff28-1020-4962-8131-c11a5ccaf040"
+    val serviceCredential = dbutils.secrets.get(scope = "key-vault-secret", key = "service-credential-secret")
+    val storageAccountAccessKey = dbutils.secrets.get(scope = "key-vault-secret", key = "storage-account-access-key-secret")
+    val appId = "254987db-5fcc-4025-94a2-6cbe94b75c5c"
     val tenantId = "e85413be-9893-4b17-ac77-83c4443a22a3"
-    val storageAccountName = "storageaccount8238"
+    val storageAccountName = "storageaccount779"
 
     println("CONFIG SPARK")
     println("Connect to Synapse using OAuth 2.0 with an Azure service principal")
@@ -220,13 +220,13 @@ import org.apache.spark.sql.types._
 
   private def uploadTransformedDataToSynapseTable(df: DataFrame): Unit = {
     val username = "sqladminuser@synapse79"
-    val password = dbutils.secrets.get(scope="key-vault-secret-1",key="sql-admin-password")
+    val password = dbutils.secrets.get(scope = "key-vault-secret", key = "sql-admin-password-secret")
     val server = "synapse79.sql.azuresynapse.net:1433"
     val database = "SQLPOOL1"
     val tableName = "People"
     val directoryName = "synapse_temp_data"
     val containerName = "container1"
-    val storageAccountName = "storageaccount8238"
+    val storageAccountName = "storageaccount779"
     val url = s"jdbc:sqlserver://$server;database=$database;user=$username;password=$password;encrypt=true;trustServerCertificate=false;hostNameInCertificate=*.sql.azuresynapse.net;loginTimeout=30"
     df.write
       .format("com.databricks.spark.sqldw")
