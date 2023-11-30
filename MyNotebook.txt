@@ -2,18 +2,30 @@ import org.apache.spark.sql._
 import org.apache.spark.sql.types._
 
 
+  private val serviceCredential = dbutils.secrets.get(scope = "key-vault-secret", key = "service-credential-secret")
+  private val storageAccountAccessKey = dbutils.secrets.get(scope = "key-vault-secret", key = "storage-account-access-key-secret")
 
-  println("START MY JAR")
+  private val appId = "254987db-5fcc-4025-94a2-6cbe94b75c5c"
+  private val tenantId = "e85413be-9893-4b17-ac77-83c4443a22a3"
+
+  private val username = "sqladminuser@synapse79"
+  private val password = dbutils.secrets.get(scope = "key-vault-secret", key = "sql-admin-password-secret")
+  private val server = "synapse79.sql.azuresynapse.net:1433"
+  private val database = "SQLPOOL1"
+
+  private val containerName = "level2"
+  private val storageAccountName = "storageaccount779"
+
+  private val fileName1 = "userdata1.parquet"
+  private val fileName2 = "userdata2.parquet"
+  private val fileName3 = "userdata3.parquet"
+  private val fileName4 = "userdata4.parquet"
+  private val fileName5 = "userdata5.parquet"
+
 
   //
-  
-  val serviceCredential = dbutils.secrets.get(scope = "key-vault-secret", key = "service-credential-secret")
 
-  val appId = "254987db-5fcc-4025-94a2-6cbe94b75c5c"
-  val tenantId = "e85413be-9893-4b17-ac77-83c4443a22a3"
-
-  val containerName = "level2"
-  val storageAccountName = "storageaccount779"
+  println("START MY JAR")
 
   //
 
@@ -54,25 +66,17 @@ import org.apache.spark.sql.types._
     extraConfigs = configs)
   println(s"success mounted /mnt/$containerName")
   println(dbutils.fs.ls(s"/mnt/$containerName"))
-  
 
-  //
-
-  val fileName1 = "userdata1.parquet"
-  val fileName2 = "userdata2.parquet"
-  val fileName3 = "userdata3.parquet"
-  val fileName4 = "userdata4.parquet"
-  val fileName5 = "userdata5.parquet"
 
   //
 
   println("READ DATA FROM FILES")
 
-  val mydf1 = readDataFromContainer(spark, containerName, fileName1)
-  val mydf2 = readDataFromContainer(spark, containerName, fileName2)
-  val mydf3 = readDataFromContainer(spark, containerName, fileName3)
-  val mydf4 = readDataFromContainer(spark, containerName, fileName4)
-  val mydf5 = readDataFromContainer(spark, containerName, fileName5)
+  val mydf1 = readDataFromContainer(spark, fileName1)
+  val mydf2 = readDataFromContainer(spark, fileName2)
+  val mydf3 = readDataFromContainer(spark, fileName3)
+  val mydf4 = readDataFromContainer(spark, fileName4)
+  val mydf5 = readDataFromContainer(spark, fileName5)
 
   //
 
@@ -118,7 +122,7 @@ import org.apache.spark.sql.types._
   //
 
   println("MERGING ALL TRANSFORMED DATAFRAMES TOGETHER ")
-  
+
   val dfSeq = validDataFrames.map(df => transformData(df))
   val mergeSeqDf = dfSeq.reduce(_ union _)
   mergeSeqDf.show()
@@ -143,7 +147,7 @@ import org.apache.spark.sql.types._
   //
 
 
-  private def readDataFromContainer(spark: SparkSession, containerName: String, fileName: String): DataFrame = {
+  private def readDataFromContainer(spark: SparkSession, fileName: String): DataFrame = {
     println(s"read data from file name : $fileName")
     val df = spark.read
       .option("header", "true")
@@ -171,7 +175,7 @@ import org.apache.spark.sql.types._
   }
 
 
-  private def transformData(df: DataFrame): DataFrame = {    
+  private def transformData(df: DataFrame): DataFrame = {
     val dfModified = df.withColumnRenamed("cc", "cc_mod").withMetadata("cc_mod", Metadata.fromJson("{\"tag\": \"this column has been modified\"}"))
     val dataSet = dfModified.distinct()
     val resultDataFrame = dataSet.toDF()
@@ -183,9 +187,8 @@ import org.apache.spark.sql.types._
   private def writeDataFrameToParquetFileInContainer(df: DataFrame): Unit = {
     val containerName = "level3"
     val fileName = "transformed_user_data.parquet"
-    val storageAccountName = "storageaccount779"
     val outputPath = "/FileStore/tables/output"
-    df.write.mode("overwrite").parquet(outputPath) 
+    df.write.mode("overwrite").parquet(outputPath)
     dbutils.fs.ls(outputPath)
     val filteredParquetFiles = dbutils.fs.ls(outputPath).filter(_.name.contains("parquet"))
     if (filteredParquetFiles.nonEmpty) {
@@ -198,12 +201,6 @@ import org.apache.spark.sql.types._
 
 
   private def configSparkForSynapseConnection(): Unit = {
-    val serviceCredential = dbutils.secrets.get(scope = "key-vault-secret", key = "service-credential-secret")
-    val storageAccountAccessKey = dbutils.secrets.get(scope = "key-vault-secret", key = "storage-account-access-key-secret")
-    val appId = "254987db-5fcc-4025-94a2-6cbe94b75c5c"
-    val tenantId = "e85413be-9893-4b17-ac77-83c4443a22a3"
-    val storageAccountName = "storageaccount779"
-
     println("CONFIG SPARK")
     println("Connect to Synapse using OAuth 2.0 with an Azure service principal")
 
@@ -219,14 +216,9 @@ import org.apache.spark.sql.types._
 
 
   private def uploadTransformedDataToSynapseTable(df: DataFrame): Unit = {
-    val username = "sqladminuser@synapse79"
-    val password = dbutils.secrets.get(scope = "key-vault-secret", key = "sql-admin-password-secret")
-    val server = "synapse79.sql.azuresynapse.net:1433"
-    val database = "SQLPOOL1"
     val tableName = "People"
     val directoryName = "synapse_temp_data"
     val containerName = "container1"
-    val storageAccountName = "storageaccount779"
     val url = s"jdbc:sqlserver://$server;database=$database;user=$username;password=$password;encrypt=true;trustServerCertificate=false;hostNameInCertificate=*.sql.azuresynapse.net;loginTimeout=30"
     df.write
       .format("com.databricks.spark.sqldw")

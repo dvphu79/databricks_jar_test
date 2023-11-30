@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="b530e617-7a38-402d-a55b-65452898d234" name="Changes" comment="update build.sbt" />
+    <list default="true" id="b530e617-7a38-402d-a55b-65452898d234" name="Changes" comment="- optimize codes&#10;- build a FAT JAR 'MyJob1' with new configs for databricks ( Finalize Assignments )" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -68,7 +68,7 @@
       <recent name="example" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.Main">
+  <component name="RunManager" selected="Application.PrintArgs">
     <configuration name="Main" type="Application" factoryName="Application" temporary="true">
       <option name="MAIN_CLASS_NAME" value="example.Main" />
       <module name="databricks_jar_test" />
@@ -85,6 +85,7 @@
     <configuration name="PrintArgs" type="Application" factoryName="Application" temporary="true">
       <option name="MAIN_CLASS_NAME" value="example.PrintArgs" />
       <module name="databricks_jar_test" />
+      <option name="PROGRAM_PARAMETERS" value="hello world" />
       <extension name="coverage">
         <pattern>
           <option name="PATTERN" value="example.*" />
@@ -317,7 +318,23 @@
       <option name="project" value="LOCAL" />
       <updated>1701329530564</updated>
     </task>
-    <option name="localTasksCounter" value="26" />
+    <task id="LOCAL-00026" summary="- optimize codes&#10;- build a FAT JAR 'MyJob1' with new configs for databricks ( Finalize Assignments )">
+      <option name="closed" value="true" />
+      <created>1701339112564</created>
+      <option name="number" value="00026" />
+      <option name="presentableId" value="LOCAL-00026" />
+      <option name="project" value="LOCAL" />
+      <updated>1701339112565</updated>
+    </task>
+    <task id="LOCAL-00027" summary="- optimize codes&#10;- build a FAT JAR 'MyJob1' with new configs for databricks ( Finalize Assignments )">
+      <option name="closed" value="true" />
+      <created>1701339477455</created>
+      <option name="number" value="00027" />
+      <option name="presentableId" value="LOCAL-00027" />
+      <option name="project" value="LOCAL" />
+      <updated>1701339477455</updated>
+    </task>
+    <option name="localTasksCounter" value="28" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -348,6 +365,7 @@
     <MESSAGE value="build a FAT JAR 'MyJob' with new configs for databricks ( Finalize Assignments )" />
     <MESSAGE value="update MyNotebook.txt" />
     <MESSAGE value="update build.sbt" />
-    <option name="LAST_COMMIT_MESSAGE" value="update build.sbt" />
+    <MESSAGE value="- optimize codes&#10;- build a FAT JAR 'MyJob1' with new configs for databricks ( Finalize Assignments )" />
+    <option name="LAST_COMMIT_MESSAGE" value="- optimize codes&#10;- build a FAT JAR 'MyJob1' with new configs for databricks ( Finalize Assignments )" />
   </component>
 </project>
