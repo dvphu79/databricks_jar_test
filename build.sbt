@@ -13,7 +13,7 @@ lazy val root = (project in file("."))
     compile / mainClass := Some("example.MyJob"),
     assembly / mainClass := Some("example.MyJob"),
     assembly / assemblyMergeStrategy := {
-      case PathList("META-INF", xs@_*) => MergeStrategy.discard
+      case PathList("META-INF", xs @ _*) => MergeStrategy.discard
       case x => MergeStrategy.first
     },
     libraryDependencies ++= Seq(
