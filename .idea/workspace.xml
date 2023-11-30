@@ -301,7 +301,15 @@
       <option name="project" value="LOCAL" />
       <updated>1701322451898</updated>
     </task>
-    <option name="localTasksCounter" value="24" />
+    <task id="LOCAL-00024" summary="update MyNotebook.txt">
+      <option name="closed" value="true" />
+      <created>1701323021670</created>
+      <option name="number" value="00024" />
+      <option name="presentableId" value="LOCAL-00024" />
+      <option name="project" value="LOCAL" />
+      <updated>1701323021670</updated>
+    </task>
+    <option name="localTasksCounter" value="25" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">

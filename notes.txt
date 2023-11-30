@@ -1,3 +1,5 @@
+Notes on Key Vault :
+NO NEED TO ADD ROLE ASSIGNMENT 'KEY VAULT ADMIN' TO 'DATABRICKS RESOURCE PROVIDE'
 
 https://adb-8974780857215789.9.azuredatabricks.net#secrets/createScope
 
