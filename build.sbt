@@ -10,8 +10,8 @@ lazy val root = (project in file("."))
   .settings(
     name := "databricks_jar_test",
     idePackagePrefix := Some("example"),
-    compile / mainClass := Some("example.MyJob"),
-    assembly / mainClass := Some("example.MyJob"),
+    compile / mainClass := Some("example.Main"),
+    assembly / mainClass := Some("example.Main"),
     assembly / assemblyMergeStrategy := {
       case PathList("META-INF", xs @ _*) => MergeStrategy.discard
       case x => MergeStrategy.first

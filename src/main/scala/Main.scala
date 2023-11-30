@@ -3,24 +3,13 @@ package example
 import com.databricks.dbutils_v1.DBUtilsHolder.dbutils
 import org.apache.spark.sql._
 import org.apache.spark.sql.types._
-import org.apache.spark.sql.SparkSession
 
 object Main {
   def main(args: Array[String]): Unit = {
+
+    println("------  Main [ NEW CONFIG ]  ------ ")
+
     println("START MY JAR")
-
-
-    val serviceCredential = dbutils.secrets.get(scope = "key-vault-secret-1", key = "secret")
-    val sasCredential = dbutils.secrets.get(scope = "key-vault-secret-1", key = "sas")
-
-    val containerName = "level2"
-    val storageAccountName = "storageaccount8238"
-
-    //
-
-
-    println("SAS token  -  expiration date : 9 Dec 2023")
-
 
     //
 
@@ -28,49 +17,54 @@ object Main {
 
     val spark = SparkSession.builder().getOrCreate()
 
+    //
+
+    val serviceCredential = dbutils.secrets.get(scope = "key-vault-secret", key = "service-credential-secret")
+
+    val appId = "254987db-5fcc-4025-94a2-6cbe94b75c5c"
+    val tenantId = "e85413be-9893-4b17-ac77-83c4443a22a3"
+
+    val containerName = "level2"
+    val storageAccountName = "storageaccount779"
 
     //
 
+
     println("CONFIG SPARK")
+    println("Connect to Azure Data Lake Storage Gen2 or Blob Storage using OAuth 2.0 with an Azure service principal")
 
     spark.conf.set(s"fs.azure.account.auth.type.$storageAccountName.dfs.core.windows.net", "OAuth")
     spark.conf.set(s"fs.azure.account.oauth.provider.type.$storageAccountName.dfs.core.windows.net", "org.apache.hadoop.fs.azurebfs.oauth2.ClientCredsTokenProvider")
-    spark.conf.set(s"fs.azure.account.oauth2.client.id.$storageAccountName.dfs.core.windows.net", "8d16215c-9399-4c1d-8164-bbb2f9fc8a55")
+    spark.conf.set(s"fs.azure.account.oauth2.client.id.$storageAccountName.dfs.core.windows.net", appId)
     spark.conf.set(s"fs.azure.account.oauth2.client.secret.$storageAccountName.dfs.core.windows.net", serviceCredential)
-    spark.conf.set(s"fs.azure.account.oauth2.client.endpoint.$storageAccountName.dfs.core.windows.net", "https://login.microsoftonline.com/e85413be-9893-4b17-ac77-83c4443a22a3/oauth2/token")
-    spark.conf.set(s"fs.azure.account.key.$storageAccountName>.dfs.core.windows.net", sasCredential)
-
-    //
+    spark.conf.set(s"fs.azure.account.oauth2.client.endpoint.$storageAccountName.dfs.core.windows.net", s"https://login.microsoftonline.com/$tenantId/oauth2/token")
 
 
     //
 
     println("START MOUNT")
+    println("Config using OAuth 2.0 with an Azure service principal")
 
     val configs = Map(
       "fs.azure.account.auth.type" -> "OAuth",
       "fs.azure.account.oauth.provider.type" -> "org.apache.hadoop.fs.azurebfs.oauth2.ClientCredsTokenProvider",
-      "fs.azure.account.oauth2.client.id" -> "8d16215c-9399-4c1d-8164-bbb2f9fc8a55",
-      "fs.azure.account.oauth2.client.secret" -> "~xw8Q~o4hB2zHNZXGZKbFoXoammn04ngb4-ZVdpc",
-      "fs.azure.account.oauth2.client.endpoint" -> "https://login.microsoftonline.com/e85413be-9893-4b17-ac77-83c4443a22a3/oauth2/token")
+      "fs.azure.account.oauth2.client.id" -> appId,
+      "fs.azure.account.oauth2.client.secret" -> serviceCredential,
+      "fs.azure.account.oauth2.client.endpoint" -> s"https://login.microsoftonline.com/$tenantId/oauth2/token",
+      "fs.azure.createRemoteFileSystemDuringInitialization" -> "true")
 
-
-    var mounts = dbutils.fs.ls("/mnt/").filter(_.name.contains(s"$containerName"))
-    println(mounts.size)
-    if (mounts.nonEmpty) {
+    try {
       dbutils.fs.unmount(s"/mnt/$containerName")
-      println(s"force unmounted /mnt/$containerName")
+      println(s"success unmounted /mnt/$containerName")
+    } catch {
+      case exception: Exception => println(s"failed unmounted /mnt/$containerName")
     }
-    mounts = dbutils.fs.ls("/mnt/").filter(_.name.contains(s"$containerName"))
-    println(mounts.size)
-    if (mounts.isEmpty) {
-      dbutils.fs.mount(
-        source = s"abfss://$containerName@$storageAccountName.dfs.core.windows.net",
-        mountPoint = s"/mnt/$containerName",
-        extraConfigs = configs)
-      println(s"mounted /mnt/$containerName")
-    }
-    println(mounts.size)
+
+    dbutils.fs.mount(
+      source = s"abfss://$containerName@$storageAccountName.dfs.core.windows.net",
+      mountPoint = s"/mnt/$containerName",
+      extraConfigs = configs)
+    println(s"success mounted /mnt/$containerName")
     println(dbutils.fs.ls(s"/mnt/$containerName"))
 
 
@@ -116,40 +110,43 @@ object Main {
 
     //
 
-    println("CHECK VALIDATION ON DATA FILES")
+    println("CHECK VALIDATION ON DATA FILES AND FILTER VALID DATA FRAMES")
 
-    checkValidationOnDataFiles(mydf1, fileName1, expectedSchema)
-    checkValidationOnDataFiles(mydf2, fileName2, expectedSchema)
-    checkValidationOnDataFiles(mydf3, fileName3, expectedSchema)
-    checkValidationOnDataFiles(mydf4, fileName4, expectedSchema)
-    checkValidationOnDataFiles(mydf5, fileName5, expectedSchema)
+    val validCheck1 = checkValidationOnDataFiles(mydf1, fileName1, expectedSchema)
+    val validCheck2 = checkValidationOnDataFiles(mydf2, fileName2, expectedSchema)
+    val validCheck3 = checkValidationOnDataFiles(mydf3, fileName3, expectedSchema)
+    val validCheck4 = checkValidationOnDataFiles(mydf4, fileName4, expectedSchema)
+    val validCheck5 = checkValidationOnDataFiles(mydf5, fileName5, expectedSchema)
 
-
-    //
-
-    println("TRANSFORM DATA FRAME")
-
-    val transformedDataFrame1 = transformData(mydf1, fileName1)
-    val transformedDataFrame2 = transformData(mydf2, fileName2)
-    val transformedDataFrame3 = transformData(mydf3, fileName3)
-    val transformedDataFrame4 = transformData(mydf4, fileName4)
-    val transformedDataFrame5 = transformData(mydf5, fileName5)
-
-
-
+    val checksResult = Map(
+      mydf1 -> validCheck1,
+      mydf2 -> validCheck2,
+      mydf3 -> validCheck3,
+      mydf4 -> validCheck4,
+      mydf5 -> validCheck5
+    )
+    val validDataFrames = checksResult.filter(x => x._2 == true).keys
 
     //
 
-    println("WRITE TRANSFORM DATA FRAME TO ADLS 2  CONTAINER (level3) ")
+    println("MERGING ALL TRANSFORMED DATAFRAMES TOGETHER ")
 
+    val dfSeq = validDataFrames.map(df => transformData(df))
+    val mergeSeqDf = dfSeq.reduce(_ union _)
+    mergeSeqDf.show()
 
-    writeDataFrameToParquetFileInContainer(transformedDataFrame1, fileName1)
-    writeDataFrameToParquetFileInContainer(transformedDataFrame2, fileName2)
-    writeDataFrameToParquetFileInContainer(transformedDataFrame3, fileName3)
-    writeDataFrameToParquetFileInContainer(transformedDataFrame4, fileName4)
-    writeDataFrameToParquetFileInContainer(transformedDataFrame5, fileName5)
+    //
 
+    println("WRITE TRANSFORMED DATA TO Azure Data Lake Storage Gen2 ")
 
+    writeDataFrameToParquetFileInContainer(mergeSeqDf)
+
+    //
+
+    println("UPLOAD TRANSFORMED DATA TO A TABLE IN DATA WAREHOUSE (AZURE SYNAPSE) ")
+
+    configSparkForSynapseConnection()
+    uploadTransformedDataToSynapseTable(mergeSeqDf)
 
     //
 
@@ -158,149 +155,113 @@ object Main {
     //
 
 
+    println("------  Main [ NEW CONFIG ]  ------ ")
+
+
+    //
+
+
   }
 
 
-   private def readDataFromContainer(spark: SparkSession, containerName: String, fileName: String): DataFrame = {
-      println(s"read data from file name : $fileName")
-      val df = spark.read
-        .option("header", "true")
-        .option("inferSchema", "true")
-        .parquet(s"/mnt/$containerName/$fileName")
-      df.printSchema()
-      df.show()
-      return df
-    }
+  private def readDataFromContainer(spark: SparkSession, containerName: String, fileName: String): DataFrame = {
+    println(s"read data from file name : $fileName")
+    val df = spark.read
+      .option("header", "true")
+      .option("inferSchema", "true")
+      .parquet(s"/mnt/$containerName/$fileName")
+    df.show()
+    return df
+  }
 
 
-  private def checkMatchingOnColumnsNames(df: DataFrame, fileName: String, expectedSchema: StructType): Boolean = {
-      if (df.columns.toSet == expectedSchema.fieldNames.toSet) {
-        // println(s"$fileName columns names matched")
-      } else {
-        // println(s"$fileName columns names not matched")
-      }
-      return (df.columns.toSet == expectedSchema.fieldNames.toSet)
-    }
+  private def checkMatchingOnColumnsNames(df: DataFrame, fileName: String, expectedSchema: StructType): Boolean = (df.columns.toSet == expectedSchema.fieldNames.toSet)
 
-  private def checkDataTypesMatchingOnColumns(df: DataFrame, fileName: String): Boolean = {
-      // println(s"CHECKING ON FILE '$fileName' ...")
-      var hasExistColumnDataTypeNotMatch = false
-      if (df.schema("registration_dttm").dataType.typeName == "timestamp") {
-        // println("registration_dttm is 'timestamp' column")
-      } else {
-        hasExistColumnDataTypeNotMatch = true
-      }
 
-      if (df.schema("id").dataType.typeName == "integer") {
-        // println("id is 'integer' column")
-      } else {
-        hasExistColumnDataTypeNotMatch = true
-      }
+  private def checkDataTypesMatchingOnColumns(df: DataFrame, fileName: String): Boolean = (df.schema("registration_dttm").dataType.typeName == "timestamp" && df.schema("id").dataType.typeName == "integer" && df.schema("salary").dataType.typeName == "double" && df.schema("first_name").dataType.typeName == "string" && df.schema("last_name").dataType.typeName == "string" && df.schema("email").dataType.typeName == "string" && df.schema("gender").dataType.typeName == "string" && df.schema("ip_address").dataType.typeName == "string" && df.schema("cc").dataType.typeName == "string" && df.schema("country").dataType.typeName == "string" && df.schema("birthdate").dataType.typeName == "string" && df.schema("title").dataType.typeName == "string" && df.schema("comments").dataType.typeName == "string")
 
-      if (df.schema("salary").dataType.typeName == "double") {
-        // println("salary is 'double' column")
-      } else {
-        hasExistColumnDataTypeNotMatch = true
-      }
-
-      if (df.schema("first_name").dataType.typeName == "string") {
-        // println("first_name is 'string' column")
-      } else {
-        hasExistColumnDataTypeNotMatch = true
-      }
-
-      if (df.schema("last_name").dataType.typeName == "string") {
-        // println("last_name is 'string' column")
-      } else {
-        hasExistColumnDataTypeNotMatch = true
-      }
-
-      if (df.schema("email").dataType.typeName == "string") {
-        // println("email is 'string' column")
-      } else {
-        hasExistColumnDataTypeNotMatch = true
-      }
-
-      if (df.schema("gender").dataType.typeName == "string") {
-        // println("gender is 'string' column")
-      } else {
-        hasExistColumnDataTypeNotMatch = true
-      }
-
-      if (df.schema("ip_address").dataType.typeName == "string") {
-        // println("ip_address is 'string' column")
-      } else {
-        hasExistColumnDataTypeNotMatch = true
-      }
-
-      if (df.schema("cc").dataType.typeName == "string") {
-        // println("cc is 'string' column")
-      } else {
-        hasExistColumnDataTypeNotMatch = true
-      }
-
-      if (df.schema("country").dataType.typeName == "string") {
-        // println("country is 'string' column")
-      } else {
-        hasExistColumnDataTypeNotMatch = true
-      }
-
-      if (df.schema("birthdate").dataType.typeName == "string") {
-        // println("birthdate is 'string' column")
-      } else {
-        hasExistColumnDataTypeNotMatch = true
-      }
-
-      if (df.schema("title").dataType.typeName == "string") {
-        // println("title is 'string' column")
-      } else {
-        hasExistColumnDataTypeNotMatch = true
-      }
-
-      if (df.schema("comments").dataType.typeName == "string") {
-        // println("comments is 'string' column")
-      } else {
-        hasExistColumnDataTypeNotMatch = true
-      }
-
-      return !hasExistColumnDataTypeNotMatch
-    }
 
   private def checkValidationOnDataFiles(df: DataFrame, fileName: String, expectedSchema: StructType): Boolean = {
-      val result = (checkMatchingOnColumnsNames(df, fileName, expectedSchema) && checkDataTypesMatchingOnColumns(df, fileName))
-      if (result) {
-        println(s"$fileName valid")
-      } else {
-        println(s"$fileName not valid")
-      }
-      return result
+    val result = (checkMatchingOnColumnsNames(df, fileName, expectedSchema) && checkDataTypesMatchingOnColumns(df, fileName))
+    if (result) {
+      println(s"$fileName valid")
+    } else {
+      println(s"$fileName not valid")
     }
-
-
-  private def transformData(df: DataFrame, fileName: String): DataFrame = {
-      println(s"transform data from file : $fileName")
-      val dfModified = df.withColumnRenamed("cc", "cc_mod").withMetadata("cc_mod", Metadata.fromJson("{\"tag\": \"this column has been modified\"}"))
-      val dataSet = dfModified.distinct()
-      val resultDataFrame = dataSet.toDF()
-      resultDataFrame.printSchema()
-      return resultDataFrame
-    }
-
-
-  private def writeDataFrameToParquetFileInContainer(df: DataFrame, fileName: String): Unit = {
-      val containerName = "level3"
-      val storageAccountName = "storageaccount8238"
-      val outputPath = "/FileStore/tables/output"
-      df.write.mode("overwrite").parquet(outputPath)
-      dbutils.fs.ls(outputPath)
-      val filteredParquetFiles = dbutils.fs.ls(outputPath).filter(_.name.contains("parquet"))
-      if (filteredParquetFiles.nonEmpty) {
-        val resultParquetFile = filteredParquetFiles.head
-        println(s"write transformed data frame to parquet file '$fileName' in ADLS container named '$containerName'  ")
-        println(s"path :  ${resultParquetFile.path}  ")
-        dbutils.fs.cp(resultParquetFile.path, s"abfss://$containerName@$storageAccountName.dfs.core.windows.net/$fileName")
-      }
-    }
-
-
+    return result
   }
+
+
+  private def transformData(df: DataFrame): DataFrame = {
+    val dfModified = df.withColumnRenamed("cc", "cc_mod").withMetadata("cc_mod", Metadata.fromJson("{\"tag\": \"this column has been modified\"}"))
+    val dataSet = dfModified.distinct()
+    val resultDataFrame = dataSet.toDF()
+    println(s"transform data success")
+    return resultDataFrame
+  }
+
+
+  private def writeDataFrameToParquetFileInContainer(df: DataFrame): Unit = {
+    val containerName = "level3"
+    val fileName = "transformed_user_data.parquet"
+    val storageAccountName = "storageaccount779"
+    val outputPath = "/FileStore/tables/output"
+    df.write.mode("overwrite").parquet(outputPath)
+    dbutils.fs.ls(outputPath)
+    val filteredParquetFiles = dbutils.fs.ls(outputPath).filter(_.name.contains("parquet"))
+    if (filteredParquetFiles.nonEmpty) {
+      val resultParquetFile = filteredParquetFiles.head
+      println(s"write transformed data to parquet file '$fileName' in container named '$containerName'  ")
+      println(s"path :  ${resultParquetFile.path}  ")
+      dbutils.fs.cp(resultParquetFile.path, s"abfss://$containerName@$storageAccountName.dfs.core.windows.net/$fileName")
+    }
+  }
+
+
+  private def configSparkForSynapseConnection(): Unit = {
+    val serviceCredential = dbutils.secrets.get(scope = "key-vault-secret", key = "service-credential-secret")
+    val storageAccountAccessKey = dbutils.secrets.get(scope = "key-vault-secret", key = "storage-account-access-key-secret")
+    val appId = "254987db-5fcc-4025-94a2-6cbe94b75c5c"
+    val tenantId = "e85413be-9893-4b17-ac77-83c4443a22a3"
+    val storageAccountName = "storageaccount779"
+
+    println("CREATE SPARK INSTANCE")
+    val spark = SparkSession.builder().getOrCreate()
+
+    println("CONFIG SPARK")
+    println("Connect to Synapse using OAuth 2.0 with an Azure service principal")
+
+    spark.conf.set(s"fs.azure.account.auth.type.$storageAccountName.dfs.core.windows.net", "OAuth")
+    spark.conf.set(s"fs.azure.account.oauth.provider.type.$storageAccountName.dfs.core.windows.net", "org.apache.hadoop.fs.azurebfs.oauth2.ClientCredsTokenProvider")
+    spark.conf.set(s"fs.azure.account.oauth2.client.id.$storageAccountName.dfs.core.windows.net", appId)
+    spark.conf.set(s"fs.azure.account.oauth2.client.secret.$storageAccountName.dfs.core.windows.net", serviceCredential)
+    spark.conf.set(s"fs.azure.account.oauth2.client.endpoint.$storageAccountName.dfs.core.windows.net", s"https://login.microsoftonline.com/$tenantId/oauth2/token")
+    spark.conf.set("spark.databricks.sqldw.jdbc.service.principal.client.id", appId)
+    spark.conf.set("spark.databricks.sqldw.jdbc.service.principal.client.secret", serviceCredential)
+    spark.conf.set(s"fs.azure.account.key.$storageAccountName.dfs.core.windows.net", storageAccountAccessKey)
+  }
+
+
+  private def uploadTransformedDataToSynapseTable(df: DataFrame): Unit = {
+    val username = "sqladminuser@synapse79"
+    val password = dbutils.secrets.get(scope = "key-vault-secret", key = "sql-admin-password-secret")
+    val server = "synapse79.sql.azuresynapse.net:1433"
+    val database = "SQLPOOL1"
+    val tableName = "People"
+    val directoryName = "synapse_temp_data"
+    val containerName = "container1"
+    val storageAccountName = "storageaccount779"
+    val url = s"jdbc:sqlserver://$server;database=$database;user=$username;password=$password;encrypt=true;trustServerCertificate=false;hostNameInCertificate=*.sql.azuresynapse.net;loginTimeout=30"
+    df.write
+      .format("com.databricks.spark.sqldw")
+      .option("url", url)
+      .option("forwardSparkAzureStorageCredentials", "true")
+      .option("dbTable", tableName)
+      .option("tempDir", s"abfss://$containerName@$storageAccountName.dfs.core.windows.net/$directoryName")
+      .mode("overwrite")
+      .save()
+    println("uploaded data to synapse table success ")
+  }
+
+
+}
