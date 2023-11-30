@@ -1,11 +1,7 @@
 
-https://adb-2726661345453724.4.azuredatabricks.net#secrets/createScope
+https://adb-8974780857215789.9.azuredatabricks.net#secrets/createScope
 
-https://adb-2726661345453724.4.azuredatabricks.net
-
-key-vault-secret-2
-
-key-vault-secret-1
+https://adb-8974780857215789.9.azuredatabricks.net
 
 key-vault-secret
 
