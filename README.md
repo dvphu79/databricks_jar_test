@@ -1,0 +1,1 @@
+A sample scala project on TMA Data Engineer Training 2023
